@@ -1,14 +1,22 @@
-import { fetchChampions } from "../utils/fetchChampions";
+import { useNavigate } from "react-router-dom";
 import championsRoleData from "../../../championsRoles.json";
+
 export default function ChampionCard({ champion }) {
+  const navigate = useNavigate();
   const version = "14.8.1";
   const imgUrl = `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champion.image.full}`;
-
   const champRole = championsRoleData[champion.name]?.[0] || "Ns";
 
+  const handleClick = () => {
+    navigate(`/champion/${champion.id}`);
+  };
+
   return (
-    <div className="bg-black rounded-2xl shadow-md text-white p-4">
-      <div className="bg-black rounded-2xl shadow-md text-white p-4 flex items-center">
+    <div
+      onClick={handleClick}
+      className="bg-black rounded-2xl shadow-md text-white p-4 cursor-pointer hover:scale-105 transition-transform"
+    >
+      <div className="flex items-center">
         <img
           src={imgUrl}
           alt={champion.name}
@@ -21,12 +29,11 @@ export default function ChampionCard({ champion }) {
         </div>
       </div>
 
-      {/* Comprobamos si 'spells' existe y es un array */}
       {champion.spells &&
       Array.isArray(champion.spells) &&
       champion.spells.length > 0 ? (
         <div className="mt-4">
-          <h2 className="text-center text-sm font-semibold ">Habilidades:</h2>
+          <h2 className="text-center text-sm font-semibold">Habilidades:</h2>
           <ul className="list-disc pl-4">
             {champion.spells.map((spell, index) => (
               <li
