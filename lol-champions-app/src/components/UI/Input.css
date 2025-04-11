@@ -1,0 +1,17 @@
+@import "tailwindcss";
+.Input {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.75rem;
+  border: 2px solid #4b0082;
+  background-color: #1c1c1e;
+  color: white;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.Input:focus {
+  outline: none;
+  border-color: gold;
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3);
+}
