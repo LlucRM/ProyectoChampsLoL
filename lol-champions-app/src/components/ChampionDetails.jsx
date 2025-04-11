@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+import llorando from "/triste.png";
 export default function ChampionDetails() {
   const { id } = useParams();
   const [champion, setChampion] = useState(null);
@@ -30,7 +30,16 @@ export default function ChampionDetails() {
     return <div className="text-white text-center mt-10">Cargando...</div>;
   if (!champion)
     return (
-      <div className="text-white text-center mt-10">Campeón no encontrado</div>
+      <div className="text-shadow-black text-center mt-10">
+        Campeón no encontrado
+        <div className="flex justify-center items-center">
+          <img
+            src={llorando}
+            alt="No encontramos ni el icono de encontrar"
+            className="max-w-xs max-h-xs"
+          />
+        </div>
+      </div>
     );
 
   const imgUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champion.id}_0.jpg`;

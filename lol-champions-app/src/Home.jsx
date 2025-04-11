@@ -7,6 +7,7 @@ import zoe from "/Zoe.jpg";
 import Spinner from "./components/UI/Spinner";
 import championsRoleData from "../../championsRoles.json";
 import RoleFilter from "./components/RoleFilter";
+import { NavLink } from "react-router-dom";
 
 export default function Home() {
   const [champions, setChampions] = useState([]);
@@ -47,16 +48,20 @@ export default function Home() {
       ) : (
         <>
           <div className="flex gap-8 mb-8">
-            <img
-              src={draven}
-              alt="Draven imagen"
-              className="w-150 h-auto rounded-lg shadow-xl"
-            />
-            <img
-              src={zoe}
-              alt="Zoe imagen"
-              className="w-150 h-auto rounded-lg shadow-xl"
-            />
+            <NavLink to="/champion/Draven">
+              <img
+                src={draven}
+                alt="Draven imagen"
+                className="w-150 h-auto rounded-lg shadow-xl transform transition-transform duration-300 hover:translate-y-[-10px]"
+              />
+            </NavLink>
+            <NavLink to="/champion/Zoe">
+              <img
+                src={zoe}
+                alt="Zoe imagen"
+                className="w-150 h-auto rounded-lg shadow-xl transform transition-transform duration-300 hover:translate-y-[-10px]"
+              />
+            </NavLink>
           </div>
 
           {/* Componente Input para buscar campeones */}

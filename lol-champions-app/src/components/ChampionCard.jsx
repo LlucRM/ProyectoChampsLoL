@@ -43,7 +43,10 @@ export default function ChampionCard({ champion }) {
                 <span className="font-semibold text-yellow-400">
                   {spell.name}:
                 </span>
-                <span className="text-gray-300"> {spell.cost}</span>
+                <span className="text-gray-300">
+                  {" "}
+                  {spell.cost === "0" ? "Sin coste" : spell.cost}
+                </span>
               </li>
             ))}
           </ul>
