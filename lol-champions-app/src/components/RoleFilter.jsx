@@ -2,7 +2,7 @@ import React from "react";
 
 const RoleFilter = ({ selectedRole, onRoleChange }) => {
   return (
-    <div className="mb-12">
+    <div className="mb-12 ">
       <select
         value={selectedRole}
         onChange={(e) => onRoleChange(e.target.value)}

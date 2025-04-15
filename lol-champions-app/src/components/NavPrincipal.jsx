@@ -2,11 +2,20 @@ import { NavLink } from "react-router-dom";
 
 function NavPrincipal() {
   return (
-    <header className="bg-indigo-900 p-4 shadow-lg">
+    <header className="bg-gray-600 p-4 shadow-lg">
       <nav>
         <ul className="flex space-x-4 text-white text-lg">
           <li>
             <NavLink to="/"> Inicio </NavLink>
+          </li>
+          <li>
+            <NavLink to="/Champion/Draven"> DRAVENNNN</NavLink>
+          </li>
+          <li>
+            <NavLink to="/favorites">Favoritos</NavLink>
+          </li>
+          <li>
+            <NavLink to="/ItemsPage">Items</NavLink>
           </li>
         </ul>
       </nav>
