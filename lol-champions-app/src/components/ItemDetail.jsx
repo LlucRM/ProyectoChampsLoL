@@ -1,18 +1,20 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import llorando from "/triste.png";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function ItemDetails() {
   const { id } = useParams();
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const version = "15.7.1";
+  const { language } = useLanguage();
 
   useEffect(() => {
     const fetchItemDetails = async () => {
       try {
         const response = await fetch(
-          `https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/item.json`
+          `https://ddragon.leagueoflegends.com/cdn/${version}/data/${language}/item.json`
         );
         const data = await response.json();
         const itemData = data.data[String(id)];
@@ -30,7 +32,7 @@ export default function ItemDetails() {
     };
 
     fetchItemDetails();
-  }, [id]);
+  }, [id, language]);
 
   if (loading)
     return <div className="text-white text-center mt-10">Cargando...</div>;

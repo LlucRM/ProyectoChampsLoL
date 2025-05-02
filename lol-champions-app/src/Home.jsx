@@ -11,6 +11,8 @@ import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import Carrusel from "./components/UI/Carrusel";
 import { fetchFavorites } from "./api/favorites";
+import { useLanguage } from "./context/LanguageContext";
+import { useUser } from "./context/UserContext";
 
 export default function Home() {
   const [champions, setChampions] = useState([]);
@@ -19,14 +21,23 @@ export default function Home() {
   const [selectedRole, setSelectedRole] = useState("");
   const [scrollY, setScrollY] = useState(0);
   const [favorites, setFavorites] = useState([]);
+  const { language } = useLanguage();
+  const { user } = useUser();
 
   useEffect(() => {
-    fetchChampions()
+    setLoading(true);
+    fetchChampions(language)
       .then((data) => setChampions(data))
       .catch((error) => console.error("Error al obtener los campeones:", error))
       .finally(() => setLoading(false));
 
-    fetchFavorites().then(setFavorites);
+    if (user) {
+      fetchFavorites(user) // Pasar el objeto completo 'user' aquí
+        .then(setFavorites)
+        .catch((error) =>
+          console.error("Error al obtener los favoritos:", error)
+        );
+    }
 
     const handleScroll = () => setScrollY(window.scrollY);
 
@@ -35,7 +46,7 @@ export default function Home() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [language, user]); // Dependemos de 'user' completo, no solo 'user.username'
 
   const filtered = champions.filter((champ) => {
     const matchesSearch = champ.name
@@ -96,9 +107,10 @@ export default function Home() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Buscar Champ"
-              className="mb-12 w-72 p-3 rounded-lg bg-gray-800 text-white shadow-lg placeholder-gray-400"
+              className="mb-16 w-72 p-3 rounded-lg bg-gray-800 text-white shadow-lg placeholder-gray-400"
             />
             <RoleFilter
+              className="m-8 border-8 "
               selectedRole={selectedRole}
               onRoleChange={setSelectedRole}
             />

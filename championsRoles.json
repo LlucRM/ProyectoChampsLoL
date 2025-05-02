@@ -160,8 +160,9 @@
     "Yorick": ["Top"],
     "Yuumi": ["Support"],
     "Zac": ["Jungle"],
-    "Zyra": ["Support"]
-
+    "Zyra": ["Support"],
+    "Mel": ["Mid", "Support"],
+    "Briar": ["Jungle"]
 
   }
   

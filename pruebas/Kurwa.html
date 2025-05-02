@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Switch con Tailwind</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div class="flex items-center space-x-4 p-4">
+    <span id="label-left" class="text-sm font-medium text-gray-700">Opción A</span>
+    <button id="switch" class="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-300 transition-colors duration-300 focus:outline-none">
+      <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 translate-x-1"></span>
+    </button>
+    <span id="label-right" class="text-sm font-medium text-gray-400">Opción B</span>
+  </div>
+
+  <script>
+    const btn = document.getElementById('switch');
+    const circle = btn.querySelector('span');
+    const labelLeft = document.getElementById('label-left');
+    const labelRight = document.getElementById('label-right');
+    let state = false;
+
+    btn.addEventListener('click', () => {
+      state = !state;
+
+      if (state) {
+        btn.classList.remove('bg-gray-300');
+        btn.classList.add('bg-blue-500');
+        circle.classList.add('translate-x-5');
+        circle.classList.remove('translate-x-1');
+        labelLeft.classList.add('text-gray-400');
+        labelLeft.classList.remove('text-gray-700');
+        labelRight.classList.add('text-gray-700');
+        labelRight.classList.remove('text-gray-400');
+      } else {
+        btn.classList.add('bg-gray-300');
+        btn.classList.remove('bg-blue-500');
+        circle.classList.remove('translate-x-5');
+        circle.classList.add('translate-x-1');
+        labelLeft.classList.remove('text-gray-400');
+        labelLeft.classList.add('text-gray-700');
+        labelRight.classList.remove('text-gray-700');
+        labelRight.classList.add('text-gray-400');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -6,7 +6,7 @@ const RoleFilter = ({ selectedRole, onRoleChange }) => {
       <select
         value={selectedRole}
         onChange={(e) => onRoleChange(e.target.value)}
-        className="p-3 rounded-lg bg-gray-800 text-white shadow-lg"
+        className="p-3 rounded-lg bg-gray-800 text-white shadow-lg border-1 m-8"
       >
         <option value="">Filtrar por Rol</option>
         <option value="Top">Top</option>

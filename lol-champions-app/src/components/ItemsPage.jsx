@@ -3,22 +3,31 @@ import Input from "./UI/Input";
 import Spinner from "./UI/Spinner";
 import ItemCard from "./ItemCard";
 import { fetchItems } from "../utils/fetchItems";
+import ItemFilter from "./ItemFilter";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function ItemsPage() {
   const [items, setItems] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [selectedTag, setSelectedTag] = useState("");
+  const { language } = useLanguage();
 
   useEffect(() => {
-    fetchItems()
+    setLoading(true);
+    fetchItems(language)
       .then((data) => setItems(data))
       .catch((error) => console.error("Error al obtener los ítems:", error))
       .finally(() => setLoading(false));
-  }, []);
+  }, [language]);
 
-  const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredItems = items.filter((item) => {
+    const matchesSearch = item.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const matchesTag = selectedTag ? item.tags.includes(selectedTag) : true;
+    return matchesSearch && matchesTag;
+  });
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-black text-white overflow-hidden">
@@ -27,6 +36,10 @@ export default function ItemsPage() {
           <Spinner />
         ) : (
           <>
+            <ItemFilter
+              selectedTag={selectedTag}
+              onTagChange={setSelectedTag}
+            />
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}

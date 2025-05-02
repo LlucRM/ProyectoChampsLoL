@@ -3,7 +3,7 @@ import championsRoleData from "../../../championsRoles.json";
 
 export default function ChampionCard({ champion }) {
   const navigate = useNavigate();
-  const version = "14.8.1";
+  const version = "15.8.1";
   const imgUrl = `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champion.image.full}`;
   const champRole = championsRoleData[champion.name]?.[0] || "Ns";
 

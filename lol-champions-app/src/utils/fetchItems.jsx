@@ -1,6 +1,6 @@
-export async function fetchItems() {
+export async function fetchItems(language = "en_US") {
   const version = "15.7.1";
-  const itemsUrl = `https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/item.json`;
+  const itemsUrl = `https://ddragon.leagueoflegends.com/cdn/${version}/data/${language}/item.json`;
 
   try {
     const response = await fetch(itemsUrl);

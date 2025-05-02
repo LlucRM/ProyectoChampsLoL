@@ -1,9 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from usuarios import usuarios_bp
 from pymongo import MongoClient
-
 app = Flask(__name__)
-CORS(app)  
+CORS(app)
+
+
+app.register_blueprint(usuarios_bp, url_prefix="/api/users")
+  
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["lol_database"]
@@ -32,6 +36,8 @@ def remove_favorite(champion_id):
     if result.deleted_count == 0:
         return jsonify({"message": "Campeón no encontrado"}), 404
     return jsonify({"message": "Favorito eliminado correctamente"})
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

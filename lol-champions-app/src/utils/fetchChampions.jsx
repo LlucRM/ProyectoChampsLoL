@@ -1,29 +1,35 @@
-export async function fetchChampions() {
-  const version = "13.1.1";
-  const championsUrl = `https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/champion.json`;
+export async function fetchChampions(language = "en_US") {
+  const version = "15.8.1";
 
-  const response = await fetch(championsUrl);
-  const data = await response.json();
+  const championsUrl = `https://ddragon.leagueoflegends.com/cdn/${version}/data/${language}/champion.json`;
 
-  const champions = Object.values(data.data);
+  try {
+    const response = await fetch(championsUrl);
+    const data = await response.json();
 
-  const championsWithSpells = await Promise.all(
-    champions.map(async (champion) => {
-      const championUrl = `https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/champion/${champion.id}.json`;
+    const champions = Object.values(data.data);
 
-      const champResponse = await fetch(championUrl);
-      const champData = await champResponse.json();
+    const championsWithSpells = await Promise.all(
+      champions.map(async (champion) => {
+        const championUrl = `https://ddragon.leagueoflegends.com/cdn/${version}/data/${language}/champion/${champion.id}.json`;
 
-      const champ = champData.data[champion.id];
+        const champResponse = await fetch(championUrl);
+        const champData = await champResponse.json();
 
-      champion.spells = champ.spells.map((spell) => ({
-        ...spell,
-        cost: spell.costBurn,
-      }));
+        const champ = champData.data[champion.id];
 
-      return champion;
-    })
-  );
+        champion.spells = champ.spells.map((spell) => ({
+          ...spell,
+          cost: spell.costBurn,
+        }));
 
-  return championsWithSpells;
+        return champion;
+      })
+    );
+
+    return championsWithSpells;
+  } catch (error) {
+    console.error("Error al obtener los campeones:", error);
+    return [];
+  }
 }

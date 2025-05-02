@@ -1,24 +1,56 @@
 import { useEffect, useState } from "react";
 import { fetchFavorites, removeFavorite } from "../api/favorites";
+import { useUser } from "../context/UserContext";
+import championsRoleData from "../../../championsRoles.json";
 import { useNavigate } from "react-router-dom";
 
-const Favorites = ({ champion }) => {
-  const navigate = useNavigate();
+const Favorites = () => {
+  const { user } = useUser();
   const [favorites, setFavorites] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchFavorites().then(setFavorites);
-  }, []);
+    if (user?.username) {
+      fetchFavorites(user)
+        .then((data) => {
+          setFavorites(data || []);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error al cargar los favoritos:", error);
+          setLoading(false);
+        });
+    }
+  }, [user]);
 
-  const handleRemoveFavorite = (champId) => {
-    removeFavorite(champId)
-      .then(() => {
-        setFavorites(favorites.filter((champ) => champ.id !== champId));
-      })
-      .catch((error) => {
-        console.error("Error al eliminar favorito:", error);
-      });
+  const handleRemoveFavorite = (champion) => {
+    if (user?.username) {
+      removeFavorite(champion, user)
+        .then(() => {
+          setFavorites((prev) => prev.filter((fav) => fav !== champion));
+        })
+        .catch((error) => {
+          console.error("Error al eliminar favorito:", error);
+        });
+    }
   };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <p>Debes iniciar sesión para ver tus favoritos.</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <p>Cargando favoritos...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-black text-white overflow-hidden">
@@ -26,33 +58,41 @@ const Favorites = ({ champion }) => {
         Favoritos
       </h1>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {favorites.map((champ) => (
-          <div
-            key={champ.id}
-            className="bg-black rounded-2xl shadow-md text-white p-4 cursor-pointer hover:scale-105 transition-transform"
-            onClick={() => navigate(`/champion/${champ.id}`)}
-          >
-            <img
-              src={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champ.id}_0.jpg`}
-              alt={champ.name}
-              className="w-full h-48 object-cover rounded-xl"
-            />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4">
+        {favorites.map((championName) => {
+          const champion = championsRoleData[championName];
+          if (!champion) return null;
 
-            <h3 className="mt-2 font-semibold">{champ.name}</h3>
-            <p className="text-sm">{champ.title}</p>
+          const imgUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${championName}_0.jpg`;
 
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleRemoveFavorite(champ.id);
-              }}
-              className="mt-2 text-sm text-red-500 hover:underline"
+          const handleClick = () => {
+            navigate(`/champion/${championName}`);
+          };
+
+          return (
+            <div
+              key={championName}
+              onClick={handleClick}
+              className="bg-gray-900 rounded-2xl shadow-md text-white cursor-pointer hover:scale-105 transition-transform overflow-hidden"
             >
-              Eliminar Favorito
-            </button>
-          </div>
-        ))}
+              <img
+                src={imgUrl}
+                alt={championName}
+                className="w-full h-48 object-cover"
+              />
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemoveFavorite(championName);
+                }}
+                className="w-full py-2 text-sm text-red-400 hover:underline bg-gray-800"
+              >
+                Eliminar Favorito
+              </button>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
